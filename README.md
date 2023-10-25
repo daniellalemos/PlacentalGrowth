@@ -25,7 +25,7 @@ O repositório está organizado da seguinte forma:
 
     - `Diametro1`, `Diametro2`, `Espessura`, `Peso`, `Peso_fetal`: Subdiretórios para cada parâmetro.
 
-        - `codigo`: Contém ficheiros com o código utilizado.
+        - `Codigo`: Contém ficheiros com o código utilizado.
         - `Figuras`: Imagens resultantes do código.
 
 - **Dados**: Contém os ficheiros dos dados utilizados neste estudo e o código relacionado ao seu tratamento e exploração.
