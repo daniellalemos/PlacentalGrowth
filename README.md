@@ -49,7 +49,7 @@ Os resultados deste estudo fornecem informações importantes sobre o desenvolvi
 
 ## Autor
 
-- Daniela Lemos
+- Daniela Filipa Machado Lemos
 - Contacto: pg45469@alunos.uminho.pt
 
 Dissertação sob orientação de: 
