@@ -1,0 +1,461 @@
+---
+title: "\\textbf{Relatório de crescimento placentar e fetal}"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    keep_tex: true
+header-includes:
+  - \usepackage{background}
+params:
+  process_number: NA
+  pacient_name: NA
+  age: NA
+  date_input: NA
+  infos: NA
+  points_data_d1: NA
+  points_data_d2: NA
+  points_data_pt: NA
+  points_data_pw: NA
+  points_data_fw: NA
+  point_info_d1: NA
+  point_info_d2: NA
+  point_info_pt: NA
+  point_info_pw: NA
+  point_info_fw: NA
+  calculated_ratios: NA
+  
+---
+
+\backgroundsetup{
+  scale=1,
+  color=black,
+  opacity=1,
+  angle=0,
+  position=current page.north west,
+  hshift=3cm,
+  vshift=-1cm,
+  contents={\includegraphics[width=4cm]{logo_report.png}}
+}
+
+
+<p style = 'text-align: justify;'>
+Este relatório apresenta uma análise detalhada do crescimento placentar e fetal ao longo das diferentes fases da gestação. Acompanhar o desenvolvimento destes parâmetros é fundamental para avaliar a saúde e o bem-estar do feto, bem como a função placentar. O relatório inclui informações essenciais do paciente. Além disso, são fornecidas informações detalhadas sobre os diversos parâmetros, juntamente com gráficos e tabelas que destacam os percentis de crescimento e os rácios.
+
+Os gráficos das curvas de crescimento são acompanhados por áreas sombreadas que indicam diferentes percentis de crescimento, variando de 3% a 97%. Os pontos adicionais marcados a vermelho foram inseridos pelo utilizador para representar dados específicos do paciente para um certo parâmetro. Cada secção do relatório é acompanhada por tabelas que fornecem detalhes específicos sobre os pontos marcados nos gráficos, incluindo o número do processo, a data, a idade gestacional, o valor do parâmetro medido e o percentil correspondente. Também é apresentada uma tabela com os valores dos rácios calculados.
+
+Este relatório foi gerado a partir da aplicação web [\textbf{PlacentalGrowth}](https://placentalgrowth.shinyapps.io/uminho_pt/). 
+</p>
+
+
+# Informações acerca do Paciente
+
+- **Número de processo:** `r params$process_number`
+
+\vspace{0.1cm}
+
+- **Nome do paciente:** `r params$pacient_name`
+
+\vspace{0.1cm}
+
+- **Idade:** `r params$age`
+
+\vspace{0.1cm}
+- **Data:** `r params$date_input`
+
+\vspace{0.1cm}
+- **Informações adicionais:** `r params$infos`
+
+\newpage
+
+
+# Diâmetro 1 placentar
+
+## Gráfico da curva de crescimento
+
+```{r setup, echo = FALSE, fig.width=6, fig.height=4}
+
+library(ggplot2)
+library(plotly)
+
+
+# carregar dados
+data_cent_d1 <- read.csv("diametro1.csv", header = TRUE)
+
+# Aceder aos dados dos pontos adicionados pelo utilizador a partir de params
+points_data_d1 <- params$points_data_d1
+
+legend_data_d1 <- data.frame(x = 41.5, y = data_cent_d1$cent97[nrow(data_cent_d1)], label = "97%")
+  
+
+d1 <- ggplot(data_cent_d1, aes(x = x)) +
+      geom_ribbon(aes(ymin = cent3, ymax = cent10), fill = "red", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent10, ymax = cent25), fill = "lightgreen", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent25, ymax = cent50), fill = "green4", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent50, ymax = cent75), fill = "green4", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent75, ymax = cent90), fill = "lightgreen", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent90, ymax = cent97), fill = "red", alpha = 0.2) +
+      geom_line(aes(y = cent50), color = "darkgreen") +
+      geom_text(data = subset(data_cent_d1, x == max(x)),
+                aes(x = 42, y = cent3, label = "3%"), vjust = -0.5, color = "red", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_d1, x == max(x)),
+                aes(x = 42, y = cent10, label = "10%"), vjust = -0.5, color = "lightgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_d1, x == max(x)),
+                aes(x = 42, y = cent25, label = "25%"), vjust = -0.5, color = "green4", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_d1, x == max(x)),
+                aes(x = 42, y = cent50, label = "50%"), vjust = -0.5, color = "darkgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_d1, x == max(x)),
+                aes(x = 42, y = cent75, label = "75%"), vjust = -0.5, color = "green4", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_d1, x == max(x)),
+                aes(x = 42, y = cent90, label = "90%"), vjust = -0.5, color = "lightgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = legend_data_d1, aes(x = 42, y = y, label = label), vjust = -0.5, color = "red") +
+      geom_blank(aes(fill = "97%")) +
+      xlab("Idade gestacional (semanas)") +
+      ylab("Diâmetro 1 (cm)") +
+      theme_minimal() +
+      scale_x_continuous(breaks = seq(12, 41, 1), limits = c(12, max(data_cent_d1$x) + 2), expand = c(0, 0)) +
+      scale_y_continuous(breaks = seq(0, max(data_cent_d1$cent97), 2)) +
+      guides(fill = guide_legend(title = "Percentil", override.aes = list(vjust = 1.5, hjust = 0.5)))
+
+
+# Adicionar os pontos adicionados pelo utilizador ao gráfico
+if (nrow(points_data_d1) > 0) {
+  d1 <- d1 + geom_point(data = points_data_d1, aes(x = x, y = y), color = "red")
+}
+
+d1
+
+```
+
+
+## Tabela com informações acerca dos pontos adicionados no gráfico
+
+```{r table_diameter1, echo = FALSE, results='asis'}
+library(knitr)
+library(kableExtra, warn.conflicts = FALSE)
+
+
+# Criar um data frame com as informações do ponto
+point_info_d1 <- data.frame(
+  Processo = params$point_info_d1$Processo,
+  Data = params$point_info_d1$Data,
+  IG = params$point_info_d1$IG,
+  Diâmetro1 = params$point_info_d1$Diâmetro1,
+  Percentil = params$point_info_d1$Percentil
+)
+
+
+# Tabela de informações do ponto
+kable(point_info_d1, caption = "Informações acerca dos pontos para o Diâmetro 1.") %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+
+# Diâmetro 2 placentar
+
+## Gráfico da curva de crescimento
+
+```{r diameter2, echo = FALSE, fig.width=6, fig.height=4}
+
+# carregar dados
+data_cent_d2 <- read.csv("diametro2.csv", header = TRUE)
+
+# Aceder aos dados dos pontos adicionados pelo utilizador a partir de params
+points_data_d2 <- params$points_data_d2
+
+legend_data_d2 <- data.frame(x = 41.5, y = data_cent_d2$cent97[nrow(data_cent_d2)], label = "97%")
+
+d2 <- ggplot(data_cent_d2, aes(x = x)) +
+      geom_ribbon(aes(ymin = cent3, ymax = cent10), fill = "red", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent10, ymax = cent25), fill = "lightgreen", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent25, ymax = cent50), fill = "green4", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent50, ymax = cent75), fill = "green4", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent75, ymax = cent90), fill = "lightgreen", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent90, ymax = cent97), fill = "red", alpha = 0.2) +
+      geom_line(aes(y = cent50), color = "darkgreen") +
+      geom_text(data = subset(data_cent_d2, x == max(x)),
+                aes(x = 42, y = cent3, label = "3%"), vjust = -0.5, color = "red", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_d2, x == max(x)),
+                aes(x = 42, y = cent10, label = "10%"), vjust = -0.5, color = "lightgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_d2, x == max(x)),
+                aes(x = 42, y = cent25, label = "25%"), vjust = -0.5, color = "green4", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_d2, x == max(x)),
+                aes(x = 42, y = cent50, label = "50%"), vjust = 0.2, color = "darkgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_d2, x == max(x)),
+                aes(x = 42, y = cent75, label = "75%"), vjust = 1.2, color = "green4", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_d2, x == max(x)),
+                aes(x = 42, y = cent90, label = "90%"), vjust = 2, color = "lightgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = legend_data_d2, aes(x = 42, y = y, label = label), vjust = 3, color = "red") +
+      geom_blank(aes(fill = "97%")) +
+      xlab("Idade gestacional (semanas)") +
+      ylab("Diâmetro 2 (cm)") +
+      theme_minimal() +
+      scale_x_continuous(breaks = seq(12, 41, 1), limits = c(12, max(data_cent_d2$x) + 2), expand = c(0, 0)) +
+      scale_y_continuous(breaks = seq(0, max(data_cent_d2$cent97), 2)) +
+      guides(fill = guide_legend(title = "Percentil", override.aes = list(vjust = 1.5, hjust = 0.5)))
+
+# Adicionar os pontos adicionados pelo utilizador ao gráfico
+if (nrow(points_data_d2) > 0) {
+  d2 <- d2 + geom_point(data = points_data_d2, aes(x = x, y = y), color = "red")
+}
+
+d2
+```
+
+## Tabela com informações acerca dos pontos adicionados no gráfico
+
+```{r table_diameter2, echo = FALSE, results='asis'}
+
+# Criar um data frame com as informações do ponto
+point_info_d2 <- data.frame(
+  Processo = params$point_info_d2$Processo,
+  Data = params$point_info_d2$Data,
+  IG = params$point_info_d2$IG,
+  Diâmetro2 = params$point_info_d2$Diâmetro2,
+  Percentil = params$point_info_d2$Percentil
+)
+
+# Tabela de informações do ponto
+kable(point_info_d2, caption = "Informações acerca dos pontos para o Diâmetro 2.") %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+
+
+# Espessura placentar
+
+## Gráfico da curva de crescimento
+
+```{r thickness, echo = FALSE, fig.width=6, fig.height=4}
+
+# carregar dados
+data_cent_pt <- read.csv("placentalthickness.csv", header = TRUE)
+
+# Aceder aos dados dos pontos adicionados pelo utilizador a partir de params
+points_data_pt <- params$points_data_pt
+
+legend_data_pt <- data.frame(x = 41.5, y = data_cent_pt$cent97[nrow(data_cent_pt)], label = "97%")
+
+ pt <- ggplot(data_cent_pt, aes(x = x)) +
+      geom_ribbon(aes(ymin = cent3, ymax = cent10), fill = "red", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent10, ymax = cent25), fill = "lightgreen", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent25, ymax = cent50), fill = "green4", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent50, ymax = cent75), fill = "green4", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent75, ymax = cent90), fill = "lightgreen", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent90, ymax = cent97), fill = "red", alpha = 0.2) +
+      geom_line(aes(y = cent50), color = "darkgreen") +
+      geom_text(data = subset(data_cent_pt, x == max(x)),
+                aes(x = 42, y = cent3, label = "3%"), vjust = -0.5, color = "red", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_pt, x == max(x)),
+                aes(x = 42, y = cent10, label = "10%"), vjust = -0.5, color = "lightgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_pt, x == max(x)),
+                aes(x = 42, y = cent25, label = "25%"), vjust = -0.5, color = "green4", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_pt, x == max(x)),
+                aes(x = 42, y = cent50, label = "50%"), vjust = 0.2, color = "darkgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_pt, x == max(x)),
+                aes(x = 42, y = cent75, label = "75%"), vjust = 1.2, color = "green4", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_pt, x == max(x)),
+                aes(x = 42, y = cent90, label = "90%"), vjust = 2, color = "lightgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = legend_data_pt, aes(x = 42, y = y, label = label), vjust = 3, color = "red") +
+      geom_blank(aes(fill = "97%")) +
+      xlab("Idade gestacional (semanas)") +
+      ylab("Espessura da placenta (cm)") +
+      theme_minimal() +
+      scale_x_continuous(breaks = seq(12, 41, 1), limits = c(12, max(data_cent_pt$x) + 2), expand = c(0, 0)) +
+      scale_y_continuous(breaks = seq(0, max(data_cent_pt$cent97), 0.5)) +
+      guides(fill = guide_legend(title = "Percentile", override.aes = list(vjust = 1.5, hjust = 0.5)))
+
+# Adicionar os pontos adicionados pelo utilizador ao gráfico
+if (nrow(points_data_pt) > 0) {
+  pt <- pt + geom_point(data = points_data_pt, aes(x = x, y = y), color = "red")
+}
+
+pt
+```
+
+
+
+## Tabela com informações acerca dos pontos adicionados no gráfico
+```{r table_thickness, echo = FALSE, results='asis'}
+
+# Criar um data frame com as informações do ponto
+point_info_pt <- data.frame(
+  Processo = params$point_info_pt$Processo,
+  Data = params$point_info_pt$Data,
+  IG = params$point_info_pt$IG,
+  Espessura = params$point_info_pt$Espessura,
+  Percentil = params$point_info_pt$Percentil
+)
+
+# Tabela de informações do ponto
+kable(point_info_pt, caption = "Informações acerca dos pontos para a Espessura.") %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+
+
+# Peso placentar
+
+## Gráfico da curva de crescimento
+
+```{r weight, echo = FALSE, fig.width=6, fig.height=4}
+
+# carregar dados
+data_cent_pw <- read.csv("placentalweight.csv", header = TRUE)
+
+# Aceder aos dados dos pontos adicionados pelo utilizador a partir de params
+points_data_pw <- params$points_data_pw
+
+legend_data_pw <- data.frame(x = 41.5, y = data_cent_pw$cent97[nrow(data_cent_pw)], label = "97%")
+
+pw <- ggplot(data_cent_pw, aes(x = x)) +
+      geom_ribbon(aes(ymin = cent3, ymax = cent10), fill = "red", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent10, ymax = cent25), fill = "lightgreen", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent25, ymax = cent50), fill = "green4", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent50, ymax = cent75), fill = "green4", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent75, ymax = cent90), fill = "lightgreen", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent90, ymax = cent97), fill = "red", alpha = 0.2) +
+      geom_line(aes(y = cent50), color = "darkgreen") +
+      geom_text(data = subset(data_cent_pw, x == max(x)),
+                aes(x = 42, y = cent3, label = "3%"), vjust = -0.5, color = "red", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_pw, x == max(x)),
+                aes(x = 42, y = cent10, label = "10%"), vjust = -0.5, color = "lightgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_pw, x == max(x)),
+                aes(x = 42, y = cent25, label = "25%"), vjust = -0.5, color = "green4", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_pw, x == max(x)),
+                aes(x = 42, y = cent50, label = "50%"), vjust = 0.2, color = "darkgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_pw, x == max(x)),
+                aes(x = 42, y = cent75, label = "75%"), vjust = 1.2, color = "green4", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_pw, x == max(x)),
+                aes(x = 42, y = cent90, label = "90%"), vjust = 2, color = "lightgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = legend_data_pw, aes(x = 42, y = y, label = label), vjust = 3, color = "red") +
+      geom_blank(aes(fill = "97%")) +
+      xlab("Idade gestacional (semanas)") +
+      ylab("Peso placentar (g)") +
+      theme_minimal() +
+      scale_x_continuous(breaks = seq(12, 41, 1), limits = c(12, max(data_cent_pw$x) + 2), expand = c(0, 0)) +
+      scale_y_continuous(breaks = seq(0, max(data_cent_pw$cent97), 100)) +
+      guides(fill = guide_legend(title = "Percentil", override.aes = list(vjust = 1.5, hjust = 0.5)))
+
+# Adicionar os pontos adicionados pelo utilizador ao gráfico
+if (nrow(points_data_pw) > 0) {
+  pw <- pw + geom_point(data = points_data_pw, aes(x = x, y = y), color = "red")
+}
+
+pw
+```
+
+## Tabela com informações acerca dos pontos adicionados no gráfico
+
+```{r table_weight, echo = FALSE, results='asis'}
+
+# Criar um data frame com as informações do ponto
+point_info_pw <- data.frame(
+  Processo = params$point_info_pw$Processo,
+  Data = params$point_info_pw$Data,
+  IG = params$point_info_pw$IG,
+  Peso = params$point_info_pw$Peso,
+  Percentil = params$point_info_pw$Percentil
+)
+
+# Tabela de informações do ponto
+kable(point_info_pw, caption = "Informações acerca dos pontos para o Peso.") %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+
+
+
+# Peso fetal
+
+## Gráfico da curva de crescimento
+```{r fetalweight, echo = FALSE, fig.width=6, fig.height=4}
+
+# carregar dados
+data_cent_fw <- read.csv("fetalweight.csv", header = TRUE)
+
+# Aceder aos dados dos pontos adicionados pelo utilizador a partir de params
+points_data_fw <- params$points_data_fw
+
+legend_data_fw <- data.frame(x = 41.5, y = data_cent_fw$cent97[nrow(data_cent_fw)], label = "97%")
+
+
+fw <- ggplot(data_cent_fw, aes(x = x)) +
+      geom_ribbon(aes(ymin = cent3, ymax = cent10), fill = "red", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent10, ymax = cent25), fill = "lightgreen", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent25, ymax = cent50), fill = "green4", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent50, ymax = cent75), fill = "green4", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent75, ymax = cent90), fill = "lightgreen", alpha = 0.2) +
+      geom_ribbon(aes(ymin = cent90, ymax = cent97), fill = "red", alpha = 0.2) +
+      geom_line(aes(y = cent50), color = "darkgreen") +
+      geom_text(data = subset(data_cent_fw, x == max(x)),
+                aes(x = 42, y = cent3, label = "3%"), vjust = -0.5, color = "red", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_fw, x == max(x)),
+                aes(x = 42, y = cent10, label = "10%"), vjust = -0.5, color = "lightgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_fw, x == max(x)),
+                aes(x = 42, y = cent25, label = "25%"), vjust = -0.5, color = "green4", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_fw, x == max(x)),
+                aes(x = 42, y = cent50, label = "50%"), vjust = 0.2, color = "darkgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_fw, x == max(x)),
+                aes(x = 42, y = cent75, label = "75%"), vjust = 1.2, color = "green4", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = subset(data_cent_fw, x == max(x)),
+                aes(x = 42, y = cent90, label = "90%"), vjust = 2, color = "lightgreen", show.legend = FALSE, na.rm = TRUE) +
+      geom_text(data = legend_data_fw, aes(x = 42, y = y, label = label), vjust = 3, color = "red") +
+      geom_blank(aes(fill = "97%")) +
+      xlab("Idade gestacional (semanas)") +
+      ylab("Peso fetal (g)") +
+      theme_minimal() +
+      scale_x_continuous(breaks = seq(12, 41, 1), limits = c(12, max(data_cent_fw$x) + 2), expand = c(0, 0)) +
+      scale_y_continuous(breaks = seq(0, max(data_cent_fw$cent97), 500)) +
+      guides(fill = guide_legend(title = "Percentile", override.aes = list(vjust = 1.5, hjust = 0.5)))
+
+# Adicionar os pontos adicionados pelo utilizador ao gráfico
+if (nrow(points_data_fw) > 0) {
+  fw <- fw + geom_point(data = points_data_fw, aes(x = x, y = y), color = "red")
+}
+
+
+print(fw)
+```
+
+## Tabela com informações acerca dos pontos adicionados no gráfico
+
+```{r table_fetalweight, echo = FALSE, results='asis'}
+
+# Criar um data frame com as informações do ponto
+point_info_fw <- data.frame(
+  Processo = params$point_info_fw$Processo,
+  Data = params$point_info_fw$Data,
+  IG = params$point_info_fw$IG,
+  Peso_fetal = params$point_info_fw$Peso_fetal,
+  Percentil = params$point_info_fw$Percentil
+)
+
+# Tabela de informações do ponto
+kable(point_info_fw, caption = "Informações acerca dos pontos para o Peso Fetal.") %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+\newpage
+
+
+# Rácios
+
+- O valor do rácio1 corresponde ao Peso Fetal/ Peso Placentar.
+- O valor do rácio2 corresponde ao Pesso Placentar/ Peso fetal.
+
+
+```{r table_calculated_ratios, echo = FALSE}
+
+# Criar um data frame com as informações do ponto
+ratios <- data.frame(
+  Processo = params$calculated_ratios$Processo,
+  IG = params$calculated_ratios$IG,
+  rácio1 = params$calculated_ratios$rácio1,
+  rácio2 = params$calculated_ratios$rácio2
+)
+
+# Tabela de informações do ponto
+kable(ratios, caption = "Informações acerca dos rácios.") %>%
+  kable_styling(latex_options = "hold_position")
+
+```

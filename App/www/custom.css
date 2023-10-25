@@ -1,0 +1,64 @@
+.skin-blue .main-header .logo {
+background-color:  #edbfc0;
+}
+                                
+ .skin-blue .main-header .logo:hover {
+ background-color: #edbfc0;
+}
+                                
+                                
+.skin-blue .main-header .navbar {
+ background-color: #edbfc0;
+}
+
+.skin-blue .main-sidebar {
+background-color: #fbfbfb;
+}
+
+.skin-blue .sidebar-menu a {
+  color: #000000; 
+}
+
+.skin-blue .main-sidebar .sidebar .sidebar-menu .active a{
+background-color: #edbfc0;
+}
+                                
+
+.skin-blue .main-sidebar .sidebar .sidebar-menu {
+ background-color: #fbfbfb;
+}
+                              
+
+.skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
+ background-color: #edbfc0;
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle:hover{
+background-color: #edbfc0;
+}
+
+
+.content-wrapper, .right-side {
+background-color: #ffffff;
+}
+
+.datatable-margin {
+  margin-bottom: 100px; 
+}
+.table-title {
+  font-size: 20px; 
+  color: #ff859a; 
+}
+
+
+.instruction {
+  font-size: 16px; 
+}
+
+.instruction-list {
+  font-size: 16px; 
+  line-height: 1; 
+  margin-top: 0px; 
+  margin-bottom: 50px; 
+  padding-left: 20px; 
+}
