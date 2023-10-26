@@ -50,7 +50,7 @@ ui <- dashboardPage(
     tags$li(
       a(
         img(src = "github.png", height = 20), # Icone do Github
-        href = "https://github.com/daniellalemos/Tese", # URL do link do Github
+        href = "https://github.com/daniellalemos/PlacentalGrowth", # URL do link do Github
         title = "",
         target = "_blank" # Abre o link numa nova pagina
       ),
