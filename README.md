@@ -53,4 +53,3 @@ The results of this study provide important information about placental developm
 Thesis supervised by: 
 - Professor Ana Cristina de Silva Braga, PhD
 - Professor Rosete Maria Amorim Novais Nogueira Cardoso, PhD
-
