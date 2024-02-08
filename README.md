@@ -1,58 +1,56 @@
 <img src='App/www/minho.png' width='150'>
 
-# Regressão não linear em curvas de crescimento para parâmetros placentares em R
+# Nonlinear Regression on Growth Curves for Placental Parameters in R
+This repository contains the code and resources related to the master's thesis in Bioinformatics, titled "Nonlinear Regression on Growth Curves for Placental Parameters in R". In this study, the applicability of nonlinear regression models on growth curves of placental and fetal parameters was explored using a dataset of Portuguese parturients provided by CGC Genetics, Porto.
 
-Este repositório contém o código e os recursos relacionados à dissertação de mestrado em Bioinformática, intitulada "Regressão não linear em curvas de crescimento para parâmetros placentares em R". Neste estudo, foi explorada a aplicabilidade de modelos de regressão não linear em curvas de crescimento de parâmetros da placenta e do feto, usando um conjunto de dados de parturientes portuguesas fornecido pelo CGC Genetics, Porto.
+## Summary
+In recent years, there has been a growing interest in evaluating biometric parameters of the placenta and their relationship with obstetric outcomes. Evidence suggests that placental measurements and their evolution may reflect changes in fetal development and even newborn and adult diseases. In this context, the main objective of this study was to construct reference growth curves for parameters such as Diameter 1 (D1) and 2 (D2), Placental Thickness (PT), Placental Weight (PW), and Fetal Weight (FW) using a semiparametric regression approach.
 
-## Resumo
+## Repository Contents
 
-Nos últimos anos, tem havido um crescente interesse na avaliação dos parâmetros biométricos da placenta e a sua relação com resultados obstétricos. Evidências sugerem que as medidas da placenta e a sua evolução podem refletir alterações no desenvolvimento do feto e até mesmo doenças do recém-nascido e do adulto. Neste contexto, este estudo teve como principal objetivo a construção de curvas de crescimento de referência para parâmetros como o Diâmetro 1 (D1) e 2 (D2), Espessura placentar (EP), Peso placentar (PP) e Peso fetal (PF) usando uma abordagem de regressão semiparamétrica.
+The repository is organized as follows:
 
-## Conteúdo do Repositório
+- **App**: Contains files related to the web application developed to analyze and interpret the constructed growth curves.
 
-O repositório está organizado da seguinte forma:
+    - Files `global.r`, `ui.r`, `server.r` contain the code of the web application.
+    - CSV files contain data for plotting the curves: `diameter1.csv`, `diameter2.csv`, `fetalweight.csv`, `placentalweight.csv`, `placentalthickness.csv`.
+    - HTML files for the application interface: `home.html`, `intro_text.html`, `ratios.html`.
+    - File `help.csv` contains information for the help menu.
+    - File `report.rmd` contains the template of the report produced by the application with the analyses.
+    - Folder `www` contains additional resources, such as custom CSS style sheets, a user guide in PDF, and PNG images.
 
-- **App**: Contém os ficheiros relacionados à aplicação web desenvolvida para analisar e interpretar as curvas de crescimento construídas.
+- **Growth_Curves**: Contains the code and figures related to the construction of growth curves for different parameters.
 
-    - Ficheiros `global.r`, `ui.r`, `server.r` contêm o código da aplicação web.
-    - Ficheiros CSV contêm os dados para traçar as curvas: `diametro1.csv`, `diametro2.csv`, `fetalweight.csv`, `placentalweight.csv`, `placentalthickness.csv`.
-    - Ficheiros HTML para a interface da aplicação: `home.html`, `intro_text.html`, `ratios.html`.
-    - Ficheiro `help.csv` contém informações do menu de ajuda.
-    - Ficheiro `report.rmd` contém o template do relatório produzido pela aplicação com as análises.
-    - Pasta `www` contém recursos adicionais, como folhas de estilo CSS personalizadas, um guia de utilização em PDF e imagens em PNG.
+    - `Diametro1`, `Diametro2`, `Espessura`, `Peso`, `Peso_fetal`: Subdirectories for each parameter.
+        - `Codigo`: Contains files with the used code.
+        - `Figuras`: Images resulting from the code.
 
-- **Curvas_crescimento**: Contém o código e as figuras relacionadas à construção das curvas de crescimento para diferentes parâmetros.
+- **Dados**: Contains the files of the data used in this study and the code related to its processing and exploration.
 
-    - `Diametro1`, `Diametro2`, `Espessura`, `Peso`, `Peso_fetal`: Subdiretórios para cada parâmetro.
+    - `Codigo`: Contains files with the code for data processing and exploration.
+    - `Figuras`: Images resulting from the code.
+    - `dataset_placenta.csv`: Original dataset.
+    - `dataset_placenta_tratado.csv`: Processed dataset.
 
-        - `Codigo`: Contém ficheiros com o código utilizado.
-        - `Figuras`: Imagens resultantes do código.
 
-- **Dados**: Contém os ficheiros dos dados utilizados neste estudo e o código relacionado ao seu tratamento e exploração.
-
-    - `Codigo`: Contém ficheiros com o código para o tratamento e exploração dos dados.
-    - `Figuras`: Imagens resultantes do código.
-    - `dataset_placenta.csv`: Conjunto de dados original.
-    - `dataset_placenta_tratado.csv`: Conjunto de dados tratado.
- 
-## Aplicação Web   
+## Web Application   
 
  <img src='App/www/logo_app.png' width='250'>
  
-Foi desenvolvida uma aplicação web "PlacentalGrowth" que permite que profissionais de saúde e investigadores analisem e interpretem as curvas de crescimento construídas. 
+A web application "PlacentalGrowth" was developed to allow healthcare professionals and researchers to analyze and interpret the constructed growth curves. 
 
-A aplicação pode ser acedida em [placentalgrowth.shinyapps.io/uminho_pt/](https://placentalgrowth.shinyapps.io/uminho_pt/).
+The application can be accessed at [placentalgrowth.shinyapps.io/uminho_pt/](https://placentalgrowth.shinyapps.io/uminho_pt/).
 
-## Resultados e Implicações
+## Results and Implications
 
-Os resultados deste estudo fornecem informações importantes sobre o desenvolvimento da placenta e têm implicações significativas para a prática clínica em obstetrícia, permitindo o avanço e acompanhamento da saúde materno-fetal.
+The results of this study provide important information about placental development and have significant implications for clinical practice in obstetrics, allowing for the advancement and monitoring of maternal-fetal health.
 
-## Autor
+## Author
 
 - Daniela Filipa Machado Lemos
-- Contacto: pg45469@alunos.uminho.pt
+- Contact: pg45469@alunos.uminho.pt
 
-Dissertação sob orientação de: 
-- Professora Doutora Ana Cristina de Silva Braga
-- Professora Doutora Rosete Maria Amorim Novais Nogueira Cardoso
+Thesis supervised by: 
+- Professor Ana Cristina de Silva Braga, PhD
+- Professor Rosete Maria Amorim Novais Nogueira Cardoso, PhD
 
